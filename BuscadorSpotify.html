@@ -1,0 +1,88 @@
+<html>
+<head>
+  <SCRIPT Language=Javascript SRC="jquery.js"></script>
+  <title>Buscador de artistas</title>
+
+</head>
+<body id="bodya" >
+  <img src="spotify.jpg" id="spotify">
+  <h1 style="color:white" >Busca a tu artista favorito:</h1>
+  <div id="busca">
+    <input type="text" name="buscaArtista"size="100" id="buscador" placeholder="Escribe el nombre del artista" value="">
+    <button type="button" id="boton">Buscar</button>
+  </div>
+  <div style="text-align:center">
+    <p>Foto:</p><div id=respuestaImg></div><br>
+    <p>Nombre:</p><div id=respuestaName style="color:white"></div><br>
+    <p>Seguidores:</p><div id=respuestaFollowers style="color:white"></div>
+  </div>
+  <style>
+  h1{
+    text-align:center;
+    padding:5px 5px 0;
+    font-family:cursive;
+  }
+
+  #bodya{
+      background: url(fondo-abstracto-degradado.jpg) no-repeat bottom center scroll;
+      background-size: cover;
+  }
+
+  p{
+    font-style:italic;
+    color:white;
+  }
+
+  #busca{
+    cursor:pointer;
+    padding:10px 10px 0;
+  }
+
+  #boton{
+    display:block;
+    margin:auto;
+  }
+
+  #buscador{
+    display:block;
+    margin:auto;
+  }
+
+
+  #spotify{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    width:350px;
+    height:200px;
+
+  }
+  </style>
+
+  <script>
+  $(document).ready(function(){
+    $("#boton").click(function(a){
+      var a=document.getElementById('buscador');
+      var palabras = [];
+      var cadenaPalabras ="";
+      palabras=a.value.split(" ");
+
+      for(var i=0;i<palabras.length;i++){
+        cadenaPalabras += ""+palabras[i]+"%20";
+      }
+
+      $.getJSON("https://api.spotify.com/v1/search?q="+cadenaPalabras+"&type=artist,album,playlist,track",function(respuesta){
+        console.log(respuesta);
+			$("#respuestaImg").empty().append("<img src="+respuesta.artists.items[0].images[0].url+">");
+      $("#respuestaName").empty().append(respuesta.artists.items[0].name);
+      $("#respuestaFollowers").empty().append(respuesta.artists.items[0].followers.total);
+
+      });
+    });
+  });
+
+
+  </script>
+</body>
+
+</html>
